@@ -38,12 +38,14 @@ void loop() {
 
   if (serialData == "overall_x_steps"){
     Serial.println("Calculating Steps....");
+    homingSequence(stepperX, X_LIMIT_PIN, stepperY, Y_LIMIT_PIN);
     howManySteps(1); //Instead of x and y i just did 1 and 0 cause i felt like it if u dont like it bite me.
     serialData = "";
   }
 
   if (serialData == "overall_y_steps"){
     Serial.println("Calculating Steps....");
+    homingSequence(stepperX, X_LIMIT_PIN, stepperY, Y_LIMIT_PIN);
     howManySteps(0); //Instead of x and y i just did 1 and 0 cause i felt like it if u dont like it bite me.
     serialData = "";
   }
@@ -102,9 +104,6 @@ void homingSequence(AccelStepper &X, int X_Lim_Pin, AccelStepper &Y, int Y_Lim_P
     if (!X_AT_HOME){
       if (digitalRead(X_Lim_Pin) == LOW) {
         X.stop();
-        // back off a bit
-        X.moveTo(200);
-        while (X.distanceToGo() != 0) X.run();
         X.setCurrentPosition(0);
         xHomed = true;
       } else {
@@ -115,9 +114,6 @@ void homingSequence(AccelStepper &X, int X_Lim_Pin, AccelStepper &Y, int Y_Lim_P
     if (!Y_AT_HOME){
       if (digitalRead(Y_Lim_Pin) == LOW) {
         Y.stop();
-        // back off a bit
-        Y.moveTo(200);
-        while (Y.distanceToGo() != 0) Y.run();
         Y.setCurrentPosition(0);
         Y_AT_HOME = true;
       } else {
